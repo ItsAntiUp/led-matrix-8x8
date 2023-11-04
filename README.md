@@ -112,7 +112,7 @@ Display the provided text as a scrolling animation with the specified direction 
 ```
 #include <LEDMatrix8x8.h>
 
-LEDMatrix8x8 matrix(2, 3, 4, BRIGHTNESS_7); // Data Pin: 2, Clock Pin: 3, Latch Pin: 4, Brightness: 7
+LEDMatrix8x8 matrix(2, 3, 4, Brightness.MEDIUM); // Data Pin: 2, Clock Pin: 3, Latch Pin: 4, Brightness: medium
 
 void setup() {
     matrix.begin();
