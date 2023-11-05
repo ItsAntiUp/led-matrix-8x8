@@ -36,13 +36,24 @@ This method must be called before using other functions of the library.
 
 
 ### Predefined data types
-- **AnimationType:**
-  - RHOMBUS
-  - LEFT_ARROW
-  - RIGHT_ARROW
-  - LOADING_BAR
-  - HEARTBEAT
-  - SQUARE
+- **AnimationType:** \
+- RHOMBUS:\
+![RHOMBUS](./Pictures/Rhombus.png)
+
+- LEFT_ARROW:\
+![LEFT_ARROW](./Pictures/Left_arrow.png)
+
+- RIGHT_ARROW:\
+![RIGHT_ARROW](./Pictures/Right_arrow.png)
+
+- LOADING_BAR:\
+![LOADING_BAR](./Pictures/Loading_bar.png)
+
+- HEARTBEAT:\
+![HEARTBEAT](./Pictures/Heartbeat.png)
+
+- SQUARE:\
+![SQUARE](./Pictures/Square.png)
   
 - **AnimationMode:**
   - UP
