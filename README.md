@@ -40,11 +40,11 @@ This method must be called before using other functions of the library.
 - RHOMBUS:\
 ![RHOMBUS](./Pictures/Rhombus.png)
 
-- LEFT_ARROW:\
-![LEFT_ARROW](./Pictures/Left_arrow.png)
+- UP_ARROW:\
+![UP_ARROW](./Pictures/Up_arrow.png)
 
-- RIGHT_ARROW:\
-![RIGHT_ARROW](./Pictures/Right_arrow.png)
+- DOWN_ARROW:\
+![DOWN_ARROW](./Pictures/Down_arrow.png)
 
 - LOADING_BAR:\
 ![LOADING_BAR](./Pictures/Loading_bar.png)
@@ -113,10 +113,10 @@ Display an animation on the screen for the specified direction and duration.
 
 ## Scrolling Text
 ```
-void LEDMatrix8x8::scrollText(String text, AnimationType animationType, int delay);
+void LEDMatrix8x8::scrollText(String text, int delay);
 ```
 
-Display the provided text as a scrolling animation with the specified direction and delay between frames.
+Display the provided text as a scrolling animation with the specified delay between frames.
 
 
 ## Example Usage
