@@ -121,16 +121,37 @@ Display the provided text as a scrolling animation with the specified delay betw
 
 ## Example Usage
 ```
-#include <LEDMatrix8x8.h>
+#include "LEDMatrix8x8.h"
 
-LEDMatrix8x8 matrix(2, 3, 4, Brightness.MEDIUM); // Data Pin: 2, Clock Pin: 3, Latch Pin: 4, Brightness: medium
+const int MATRIX_DIN_PIN = 13;
+const int MATRIX_CLK_PIN = 12;
+const int MATRIX_CS_PIN = 11;
+
+LEDMatrix8x8::Brightness BRIGHTNESS = LEDMatrix8x8::B_MINIMAL;
+
+LEDMatrix8x8 matrix(MATRIX_DIN_PIN, MATRIX_CLK_PIN, MATRIX_CS_PIN, BRIGHTNESS);
 
 void setup() {
     matrix.begin();
 }
 
 void loop() {
-    matrix.displaySentence("HELLO WORLD", 500); // Display "HELLO WORLD" with a delay of 500ms between characters
+    // Displaying individual characters
+    matrix.displayCharacter('A', 2000);
+    matrix.displayCharacter('B', 2000);
+    matrix.displayCharacter('C', 2000);
+
+    // Displaying animation (RHOMBUS)
+    matrix.displayAnimation(matrix.RHOMBUS, matrix.DOWN, 5000);
+
+    // Displaying animation (LOADING_BAR)
+    matrix.displayAnimation(matrix.LOADING_BAR, matrix.UP, 6000);
+
+    // Displaying text for some amount of time
+    matrix.displayText("HELLO", 500);
+
+    // Scrolling text with 100ms interval between frames
+    matrix.scrollText("WORLD", 100);
 }
 ```
 
