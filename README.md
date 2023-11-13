@@ -46,6 +46,12 @@ This method must be called before using other functions of the library.
 - DOWN_ARROW:\
 ![DOWN_ARROW](./Pictures/Down_arrow.png)
 
+- LEFT_ARROW:\
+![LEFT_ARROW](./Pictures/Left_arrow.png)
+
+- RIGHT_ARROW:\
+![DOWN_ARROW](./Pictures/Right_arrow.png)
+
 - LOADING_BAR:\
 ![LOADING_BAR](./Pictures/Loading_bar.png)
 
@@ -56,8 +62,8 @@ This method must be called before using other functions of the library.
 ![SQUARE](./Pictures/Square.png)
   
 - **AnimationMode:**
-  - UP
-  - DOWN
+  - VERTICAL
+  - HORIZONTAL
   
 - **Brightness:**
   - MINIMAL
@@ -89,34 +95,34 @@ Clear the entire display matrix, turning off all pixels (setting the state to OF
 
 ## Displaying Characters
 ```
-void LEDMatrix8x8::displayCharacter(char ch, int duration);
+void LEDMatrix8x8::displayCharacter(char ch, int duration, AnimationMode animationMode);
 ```
 
-Display an ASCII character on the screen for the specified duration.
+Display an ASCII character on the screen for the specified duration, in the specified animation mode.
 
 
 ## Displaying Text
 ```
-void LEDMatrix8x8::displayText(String text, int delay);
+void LEDMatrix8x8::displayText(String text, int delay, AnimationMode animationMode);
 ```
 
-Display a block of text on the screen, letter by letter, at the provided intervals. The delay parameter specifies the time interval (in milliseconds) between displaying each character.
+Display a block of text on the screen, letter by letter, at the provided intervals and specified animation mode. The delay parameter specifies the time interval (in milliseconds) between displaying each character.
 
 
 ## Displaying Animations
 ```
-void LEDMatrix8x8::displayAnimation(AnimationType animationType, AnimationMode animationMode, int duration);
+void LEDMatrix8x8::displayAnimation(int duration, AnimationType animationType, AnimationMode animationMode);
 ```
 
-Display an animation on the screen for the specified direction and duration.
+Display an animation on the screen for the specified animation mode and duration.
 
 
 ## Scrolling Text
 ```
-void LEDMatrix8x8::scrollText(String text, int delay);
+void LEDMatrix8x8::scrollText(String text, int delay, AnimationMode animationMode);
 ```
 
-Display the provided text as a scrolling animation with the specified delay between frames.
+Display the provided text as a scrolling animation with the specified animation mode and delay between frames.
 
 
 ## Example Usage
@@ -136,22 +142,33 @@ void setup() {
 }
 
 void loop() {
-    // Displaying individual characters
-    matrix.displayCharacter('A', 2000);
-    matrix.displayCharacter('B', 2000);
-    matrix.displayCharacter('C', 2000);
+    // Displaying individual characters, horizontally.
+    matrix.displayCharacter('A', 2000, matrix.HORIZONTAL);
+    matrix.displayCharacter('B', 2000, matrix.HORIZONTAL);
+    matrix.displayCharacter('C', 2000, matrix.HORIZONTAL);
 
-    // Displaying animation (RHOMBUS)
-    matrix.displayAnimation(matrix.RHOMBUS, matrix.DOWN, 5000);
 
-    // Displaying animation (LOADING_BAR)
-    matrix.displayAnimation(matrix.LOADING_BAR, matrix.UP, 6000);
+    // Displaying animation (RHOMBUS, horizontal orientation)
+    matrix.displayAnimation(3000, matrix.RHOMBUS, matrix.HORIZONTAL);
 
-    // Displaying text for some amount of time
-    matrix.displayText("HELLO", 500);
+    // Displaying animation (LOADING_BAR, vertical orientation)
+    matrix.displayAnimation(3000, matrix.LOADING_BAR, matrix.VERTICAL);
 
-    // Scrolling text with 100ms interval between frames
-    matrix.scrollText("WORLD", 100);
+    // Displaying animation (UP_ARROW, vertical orientation)
+    matrix.displayAnimation(3000, matrix.UP_ARROW, matrix.VERTICAL);
+
+    // Displaying animation (LEFT_ARROW, horizontal orientation)
+    matrix.displayAnimation(3000, matrix.LEFT_ARROW, matrix.HORIZONTAL);
+
+
+    // Displaying text for some amount of time, horizontally.
+    matrix.displayText("HELLO ", 500, matrix.HORIZONTAL);
+
+    // Scrolling text with 100ms interval between frames, vertically.
+    matrix.scrollText("WORLD ", 100, matrix.VERTICAL);
+
+    // Scrolling text with 100ms interval between frames, horizontally.
+    matrix.scrollText("ARDUINO ", 100, matrix.HORIZONTAL);
 }
 ```
 
@@ -159,4 +176,4 @@ void loop() {
 If you find any issues or have suggestions for improvements, please create an issue or a pull request on GitHub.
 
 ## License
-This project is licensed under the MIT License
+This project is licensed under the MIT License.
