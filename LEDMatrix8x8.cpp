@@ -2,7 +2,11 @@
 // Description - a library, which spimplifies the process of working with MAX7219 8x8 matrix.
 
 #include "LEDMatrix8x8.h"
+
 #include <String.h>
+#include <stdint.h>
+
+using byte = unsigned char;
 
 
 const byte LEDMatrix8x8::CHARACTERS[37][8] = {
@@ -29,33 +33,33 @@ const byte LEDMatrix8x8::CHARACTERS[37][8] = {
     }, // 1
 
     {
-    B01111110,
+    B01111100,
     B00000010,
     B00000010,
-    B01111110,
+    B00111100,
     B01000000,
     B01000000,
-    B01111110,
+    B00111110,
     B00000000
     }, // 2
 
     {
-    B01111110,
+    B01111100,
     B00000010,
     B00000010,
     B01111110,
     B00000010,
     B00000010,
-    B01111110,
+    B01111100,
     B00000000
     }, // 3
 
     {
+    B00001000,
     B00011000,
     B00101000,
     B01001000,
-    B10001000,
-    B11111110,
+    B01111110,
     B00001000,
     B00001000,
     B00000000
@@ -216,7 +220,7 @@ const byte LEDMatrix8x8::CHARACTERS[37][8] = {
     }, // I
 
     {
-    B00111110,
+    B01111110,
     B00000100,
     B00000100,
     B00000100,
@@ -227,13 +231,13 @@ const byte LEDMatrix8x8::CHARACTERS[37][8] = {
     }, // J
 
     {
+    B01000010,
     B01000100,
     B01001000,
-    B01010000,
-    B01100000,
-    B01010000,
+    B01110000,
     B01001000,
     B01000100,
+    B01000010,
     B00000000
     }, // K
 
@@ -249,24 +253,24 @@ const byte LEDMatrix8x8::CHARACTERS[37][8] = {
     }, // L
 
     {
-    B10000001,
-    B11000011,
-    B10100101,
-    B10011001,
-    B10000001,
-    B10000001,
-    B10000001,
+    B01000010,
+    B01100110,
+    B01011010,
+    B01000010,
+    B01000010,
+    B01000010,
+    B01000010,
     B00000000
     }, // M
 
     {
-    B10000001,
-    B11000001,
-    B10100001,
-    B10010001,
-    B10001001,
-    B10000101,
-    B10000011,
+    B01000010,
+    B01000010,
+    B01100010,
+    B01010010,
+    B01001010,
+    B01000110,
+    B01000010,
     B00000000
     }, // N
 
@@ -276,8 +280,8 @@ const byte LEDMatrix8x8::CHARACTERS[37][8] = {
     B01000010,
     B01000010,
     B01000010,
+    B01000010,
     B00111100,
-    B00000000,
     B00000000
     }, // O
 
@@ -298,9 +302,9 @@ const byte LEDMatrix8x8::CHARACTERS[37][8] = {
     B01000010,
     B01000010,
     B01000010,
+    B01000010,
     B00111100,
-    B00000010,
-    B00000000
+    B00000010
     }, // Q
 
     {
@@ -352,20 +356,20 @@ const byte LEDMatrix8x8::CHARACTERS[37][8] = {
     B01000010,
     B01000010,
     B01000010,
+    B01000010,
     B00100100,
     B00011000,
-    B00000000,
     B00000000
     }, // V
 
     {
-    B10000001,
-    B10000001,
-    B10000001,
-    B10011001,
-    B10100101,
-    B11000011,
-    B10000001,
+    B01000010,
+    B01000010,
+    B01000010,
+    B01000010,
+    B01011010,
+    B01100110,
+    B01000010,
     B00000000
     }, // W
 
@@ -393,12 +397,12 @@ const byte LEDMatrix8x8::CHARACTERS[37][8] = {
 
     {
     B01111110,
+    B00000010,
     B00000100,
     B00001000,
     B00010000,
     B00100000,
     B01111110,
-    B00000000,
     B00000000
     },  // Z
 
@@ -415,7 +419,7 @@ const byte LEDMatrix8x8::CHARACTERS[37][8] = {
 };
 
 
-const byte LEDMatrix8x8::ANIMATIONS[][8] = {
+const byte LEDMatrix8x8::ANIMATIONS[8][8] = {
     {
     B00011000,
     B00111100,
@@ -430,24 +434,46 @@ const byte LEDMatrix8x8::ANIMATIONS[][8] = {
     {
     B00000000,
     B00011000,
-    B00001100,
+    B00111100,
     B01111110,
-    B01111110,
-    B00001100,
+    B00011000,
+    B00011000,
     B00011000,
     B00000000
-    }, // Right_Arrow
+    }, // Up_Arrow
 
     {
     B00000000,
     B00011000,
-    B00110000,
-    B01111110,
-    B01111110,
-    B00110000,
     B00011000,
+    B00011000,
+    B01111110,
+    B00111100,
+    B00011000,
+    B00000000,
+    }, // Down_Arrow
+
+    {
+    B00000000,
+    B00010000,
+    B00110000,
+    B01111110,
+    B01111110,
+    B00110000,
+    B00010000,
     B00000000
     }, // Left_Arrow
+
+    {
+    B00000000,
+    B00001000,
+    B00001100,
+    B01111110,
+    B01111110,
+    B00001100,
+    B00001000,
+    B00000000
+    }, // Right_Arrow
 
     {
     B11110000,
@@ -485,7 +511,7 @@ const byte LEDMatrix8x8::ANIMATIONS[][8] = {
 
 
 // Constructor
-LEDMatrix8x8::LEDMatrix8x8(int dataPin, int clockPin, int latchPin, Brightness brightness) {
+LEDMatrix8x8::LEDMatrix8x8(int dataPin, int clockPin, int latchPin, LEDMatrix8x8::Brightness brightness) {
     this->dataPin = dataPin;
     this->clockPin = clockPin;
     this->latchPin = latchPin;
@@ -500,18 +526,18 @@ void LEDMatrix8x8::begin() {
     pinMode(latchPin, OUTPUT);
 
     // Initialize MAX7219
-    sendCommand(0x09, 0x00);        // Decode Mode: No decoding
-    sendCommand(0x0A, brightness);  // Intensity: Set to maximum brightness (0x00 to 0x0F)
-    sendCommand(0x0B, 0x07);        // Scan Limit: Display digits 0 to 7
-    sendCommand(0x0C, 0x01);        // Shutdown: Normal operation (0x01 for normal, 0x00 for shutdown)
-    sendCommand(0x0F, 0x00);        // Display Test: Disable display test pattern
+    sendCommand(0x09, 0x00);                // Decode Mode: No decoding
+    sendCommand(0x0A, this->brightness);    // Intensity: Set to maximum brightness (0x00 to 0x0F)
+    sendCommand(0x0B, 0x07);                // Scan Limit: Display digits 0 to 7
+    sendCommand(0x0C, 0x01);                // Shutdown: Normal operation (0x01 for normal, 0x00 for shutdown)
+    sendCommand(0x0F, 0x00);                // Display Test: Disable display test pattern
 
     clear();
 }
 
 
 // Purpose: Changes the state of a single pixel on the board (specified by x, y and state)
-void LEDMatrix8x8::setPixel(int x, int y, State state) {
+void LEDMatrix8x8::setPixel(int x, int y, LEDMatrix8x8::State state) {
     bitWrite(displayBuffer[y], x, state);
 }
 
@@ -523,65 +549,96 @@ void LEDMatrix8x8::clear() {
 }
 
 
-// Purpose: Displays provided text on a screen, letter by letter, at provided delay
-void LEDMatrix8x8::displayText(String text, int delay) {
+// Purpose: Displays provided text on a screen, letter by letter, at provided delay and animation mode
+void LEDMatrix8x8::displayText(String text, int delay, LEDMatrix8x8::AnimationMode animationMode) {
     int len = text.length();
 
     for (int i = 0; i < len; ++i) {
         char ch = text.charAt(i);
 
-        displayCharacter(ch, delay);
-        displayCharacter(' ', 250);
+        displayCharacter(ch, delay, animationMode);
+        displayCharacter(' ', 250, animationMode);
     }
 }
 
 
-// Purpose: Displays an ascii character on the screen for the provided duration
-void LEDMatrix8x8::displayCharacter(char ch, int duration) {
+// Purpose: Displays an ascii character on the screen for the provided duration and animation mode
+void LEDMatrix8x8::displayCharacter(char ch, int duration, LEDMatrix8x8::AnimationMode animationMode) {
     memcpy(displayBuffer, getCharacterPattern(ch), sizeof(displayBuffer));
+
+    if (animationMode == LEDMatrix8x8::VERTICAL)
+        LEDMatrix8x8::transposeByteArray(displayBuffer, 8);
+
     displayPattern(displayBuffer, duration);
 }
 
 
-// Purpose: Displays an animation on the screen, for the wanted direction and duration
-void LEDMatrix8x8::displayAnimation(AnimationType animationType, AnimationMode animationMode, int duration) {
+// Purpose: Displays an animation on the screen, for the wanted duration and animation mode
+void LEDMatrix8x8::displayAnimation(int duration, LEDMatrix8x8::AnimationType animationType, LEDMatrix8x8::AnimationMode animationMode) {
     int currentDuration = 0;
+    byte animation[8];
 
-    for (int shiftAmount = 0; shiftAmount <= 8; ++shiftAmount) {
-        shiftPattern(ANIMATIONS[animationType], animationMode, shiftAmount);
+    memcpy(animation, ANIMATIONS[animationType], sizeof(animation));
 
-        delay(100);
-        currentDuration += 100;
+    if (animationMode == LEDMatrix8x8::HORIZONTAL) {
+      for (int i = 0; i < 8; ++i)
+        LEDMatrix8x8:mirrorBits(animation[i]);
 
-        if (currentDuration >= duration)
-            break;
+      LEDMatrix8x8::transposeByteArray(animation, 8);
+    }
+
+    while (currentDuration < duration) {
+        for (int shiftAmount = 0; shiftAmount <= 8; ++shiftAmount) {
+            shiftPattern(animation, shiftAmount, animationMode);
+
+            delay(100);
+            currentDuration += 100;
+        }
     }
 }
 
 
-// Purpose: Displays the provided text as a scrolling animation with the specified direction and delay
-void scrollText(String text, AnimationMode animationMode, int delay) {
+// Purpose: Displays the provided text as a scrolling animation with the specified delay and animation mode
+void LEDMatrix8x8::scrollText(String text, int delayDuration, LEDMatrix8x8::AnimationMode animationMode) {
     int len = text.length();
 
-    for (int i = 0; i < len + 1; ++i) {
-        for (int j = 0; j < 8; ++j) {
-            byte columnPattern = 0;
+    const int patternSize = 8;
+    const int totalPatterns = len * patternSize;
 
-            for (int k = 0; k < 8; ++k) {
-                char currentChar;
+    byte combinedPattern[totalPatterns];
 
-                if (animationMode == UP)
-                    currentChar = text[(i + k) % len];
-                else (animationMode == DOWN)
-                    currentChar = text[(len - i + k) % len];
+    // Concatenate character patterns
+    for (int i = 0; i < len; ++i) {
+        char currentChar = text[i];
+        byte charPattern[8];
 
-                const byte* charPattern = getCharacterPattern(currentChar);
-                columnPattern |= ((charPattern[k] >> j) & 1) << (7 - k);
-            }
+        memcpy(charPattern, LEDMatrix8x8::getCharacterPattern(currentChar), sizeof(charPattern));
 
-            displayPattern(columnPattern);
-            delay(delay);
+        if (animationMode == LEDMatrix8x8::VERTICAL) {
+          for (int i = 0; i < 8; ++i)
+            LEDMatrix8x8:mirrorBits(charPattern[i]);
+
+          LEDMatrix8x8::transposeByteArray(charPattern, 8);
         }
+
+        for (int j = 0; j < patternSize; ++j)
+            combinedPattern[i * patternSize + j] = charPattern[j];
+    }
+
+    // Scroll the combined pattern
+    for (int i = 0; i < totalPatterns - 7; ++i) {
+        byte columnPattern[8];
+
+        if (animationMode == LEDMatrix8x8::VERTICAL) {
+            for (int j = 0; j < 8; ++j)
+              columnPattern[j] = combinedPattern[i + 7 - j];
+        }
+        else {
+            for (int j = 0; j < 8; ++j)
+                columnPattern[j] = combinedPattern[i + j];
+        }
+
+        LEDMatrix8x8::displayPattern(columnPattern, delayDuration);
     }
 }
 
@@ -590,7 +647,7 @@ void scrollText(String text, AnimationMode animationMode, int delay) {
 
 
 // Purpose: Gets an appropriate pattern for a provided ASCII character
-byte[8] LEDMatrix8x8::getCharacterPattern(char ch) {
+uint8_t* LEDMatrix8x8::getCharacterPattern(char ch) {
     int charIndex = 36;
 
     if (ch >= '0' && ch <= '9')
@@ -600,11 +657,11 @@ byte[8] LEDMatrix8x8::getCharacterPattern(char ch) {
     else if (ch >= 'a' && ch <= 'z')
         charIndex = ch - 'a' + 10;
 
-    return CHARACTERS[charIndex];
+    return LEDMatrix8x8::CHARACTERS[charIndex];
 }
 
 
-// Purpose: Shifts a certain pattern by the specified number of places to the right
+// Purpose: Sends a command to the 8x8 matrix
 void LEDMatrix8x8::sendCommand(byte address, byte data) {
     digitalWrite(latchPin, LOW);
 
@@ -615,12 +672,12 @@ void LEDMatrix8x8::sendCommand(byte address, byte data) {
 }
 
 
-// Purpose: Shifts a certain pattern by the specified number of places to the left
-void LEDMatrix8x8::shiftPattern(byte pattern[8], AnimationMode animationMode, int shiftAmount) {
+// Purpose: Shifts a certain pattern by the specified number of places
+void LEDMatrix8x8::shiftPattern(byte pattern[8], int shiftAmount, LEDMatrix8x8::AnimationMode animationMode) {
     byte shiftedPattern[8];
 
     for (int i = 0; i < 8; ++i) {
-        int shiftIndex = animationMode == UP ? (i + shiftAmount) % 8 : (i - shiftAmount + 8) % 8;
+        int shiftIndex = animationMode == HORIZONTAL ? (i + shiftAmount) % 8 : (i - shiftAmount + 8) % 8;
         shiftedPattern[i] = pattern[shiftIndex];
     }
 
@@ -637,4 +694,31 @@ void LEDMatrix8x8::displayPattern(byte pattern[8], int duration) {
         for (int row = 0; row < 8; ++row)
             sendCommand(row + 1, pattern[row]);
     }
+}
+
+// Purpose: Mirrors the byte array
+void LEDMatrix8x8::mirrorBits(byte &b) {
+    b = ((b & 0x01) << 7) |    // Bit 0 goes to Bit 7
+        ((b & 0x02) << 5) |    // Bit 1 goes to Bit 6
+        ((b & 0x04) << 3) |    // Bit 2 goes to Bit 5
+        ((b & 0x08) << 1) |    // Bit 3 goes to Bit 4
+        ((b & 0x10) >> 1) |    // Bit 4 goes to Bit 3
+        ((b & 0x20) >> 3) |    // Bit 5 goes to Bit 2
+        ((b & 0x40) >> 5) |    // Bit 6 goes to Bit 1
+        ((b & 0x80) >> 7);     // Bit 7 goes to Bit 0
+}
+
+// Purpose: Transposes the byte array
+void LEDMatrix8x8::transposeByteArray(byte arr[], int size) {
+    byte rotatedArr[size];
+
+    for (int i = 0; i < size; ++i) {
+        rotatedArr[i] = 0;
+
+        for (int j = 0; j < 8; ++j)
+            rotatedArr[i] |= ((arr[j] >> i) & 0x01) << (7 - j);
+    }
+
+    for (int i = 0; i < size; ++i)
+        arr[i] = rotatedArr[i];
 }
