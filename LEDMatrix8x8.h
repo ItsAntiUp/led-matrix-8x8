@@ -13,7 +13,7 @@ using byte = unsigned char;
 
 class LEDMatrix8x8 {
 public:
-  enum AnimationType {
+    enum AnimationType {
       RHOMBUS = 0,
       UP_ARROW = 1,
       DOWN_ARROW = 2,
@@ -22,54 +22,54 @@ public:
       LOADING_BAR = 5,
       HEARTBEAT = 6,
       SQUARE = 7
-  };
+    };
 
-  enum AnimationMode {
+    enum AnimationMode {
       VERTICAL,
       HORIZONTAL
-  };
+    };
 
-  enum Brightness {
+    enum Brightness {
       B_MAX = 0x0F,
       B_HIGH = 0x0B,
       B_MEDIUM = 0x07,
       B_LOW = 0x03,
       B_MINIMAL = 0x00
-  };
+    };
 
-  enum State {
+    enum State {
       ON = true,
       OFF = false
-  };
+    };
 
-  LEDMatrix8x8(int dataPin, int clockPin, int latchPin, LEDMatrix8x8::Brightness brightness);
+    LEDMatrix8x8(int dataPin, int clockPin, int latchPin, LEDMatrix8x8::Brightness brightness);
 
-	static const byte ANIMATIONS[8][8];
-  static const byte CHARACTERS[37][8];
+    static const byte ANIMATIONS[8][8];
+    static const byte CHARACTERS[37][8];
 
-	void begin();
-	void setPixel(int x, int y, LEDMatrix8x8::State state);
-	void displayCharacter(char ch, int duration, AnimationMode animationMode);
-	void displayText(String str, int duration, AnimationMode animationMode);
-	void displayAnimation(int duration, LEDMatrix8x8::AnimationType animationType, LEDMatrix8x8::AnimationMode animationMode);
-	void scrollText(String text, int delayDuration, LEDMatrix8x8::AnimationMode animationMode);
-	void clear();
+    void begin();
+    void setPixel(int x, int y, LEDMatrix8x8::State state);
+    void displayCharacter(char ch, int duration, AnimationMode animationMode);
+    void displayText(String str, int duration, AnimationMode animationMode);
+    void displayAnimation(int duration, LEDMatrix8x8::AnimationType animationType, LEDMatrix8x8::AnimationMode animationMode);
+    void scrollText(String text, int delayDuration, LEDMatrix8x8::AnimationMode animationMode);
+    void clear();
 
 private:
-	int dataPin;
-	int clockPin;
-	int latchPin;
-  LEDMatrix8x8::Brightness brightness;
+    int dataPin;
+    int clockPin;
+    int latchPin;
+    LEDMatrix8x8::Brightness brightness;
 
-	byte displayBuffer[8];
+    byte displayBuffer[8];
 
-  uint8_t* getCharacterPattern(char ch);
+    uint8_t* getCharacterPattern(char ch);
 
-	void sendCommand(byte address, byte data);
-	void shiftPattern(byte pattern[8], int shiftAmount, LEDMatrix8x8::AnimationMode animationMode);
-	void displayPattern(byte pattern[8], int duration);
-  void transposeByteArray(byte arr[], int size);
-  void mirrorBits(byte &b);
+    void sendCommand(byte address, byte data);
+    void shiftPattern(byte pattern[8], int shiftAmount, LEDMatrix8x8::AnimationMode animationMode);
+    void displayPattern(byte pattern[8], int duration);
+    void transposeByteArray(byte arr[], int size);
+    void mirrorBits(byte &b);
 };
 
 #endif
